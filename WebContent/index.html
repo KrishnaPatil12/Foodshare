@@ -1,0 +1,835 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FoodShare — Share Food. Spread Hope.</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* ---------- Theme variables ---------- */
+    :root{
+      --bg: #f6fbfc;
+      --card: #ffffff;
+      --blue: #0b7bd6;
+      --teal: #08b39b;
+      --muted: #586671;
+      --dark: #0f1724;
+      --glass: rgba(255,255,255,0.7);
+      --radius: 14px;
+      --shadow-sm: 0 6px 18px rgba(15,23,42,0.06);
+      --shadow-md: 0 12px 36px rgba(15,23,42,0.08);
+      --container: 1200px;
+    }
+
+    /* ---------- Reset & base ---------- */
+    *{ box-sizing: border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: "Poppins", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg, var(--bg), #e9f9f6);
+      color:var(--dark);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+    }
+    a{ color: inherit; text-decoration:none; }
+    img{ display:block; max-width:100%; height:auto; }
+
+    /* ---------- container ---------- */
+    .wrap{
+      max-width: var(--container);
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .container{
+      width: min(var(--container), 96%);
+      margin: 0 auto;
+    }
+
+    /* ---------- NAV ---------- */
+    header{
+      position: sticky;
+      top: 12px;
+      z-index: 60;
+      display:flex;
+      justify-content: center;
+      pointer-events: none;
+    }
+    nav.navbar{
+      pointer-events: auto;
+      width: calc(100% - 48px);
+      max-width: var(--container);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:10px 18px;
+      border-radius: 12px;
+      background: linear-gradient(90deg, rgba(11,123,214,0.08), rgba(8,179,155,0.06));
+      box-shadow: var(--shadow-sm);
+      backdrop-filter: blur(6px);
+    }
+    .brand{
+      display:flex; gap:12px; align-items:center;
+    }
+    .logo{
+      width:48px; height:48px; border-radius:10px;
+      background: linear-gradient(135deg, var(--blue), var(--teal));
+      color:white; font-weight:700; display:grid; place-items:center;
+      box-shadow: 0 6px 20px rgba(11,123,214,0.12);
+      font-family: monospace;
+    }
+    .brand h1{ font-size:18px; margin:0; letter-spacing:0.2px; }
+    .nav-links{
+      display:flex; gap:18px; align-items:center;
+    }
+    .nav-links a{
+      padding:8px 12px; border-radius:8px; color:var(--dark); font-weight:600;
+    }
+    .nav-links a:hover{ background: rgba(11,123,214,0.06); color:var(--blue); }
+    .cta{
+      background: linear-gradient(90deg,var(--blue),var(--teal));
+      color:white; padding:10px 14px; border-radius:10px; font-weight:700;
+    }
+
+    /* hamburger */
+    .hamburger{ display:none; background:transparent; border:0; padding:8px; border-radius:8px; }
+    .hamburger svg{ width:24px; height:24px; color:var(--dark); }
+
+    /* ---------- Base card system ---------- */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(15,23,42,0.03);
+    }
+    .card-elevated {
+      border-radius: 40PX;
+      background: linear-gradient(180deg,#ffffff,#f6fcfc);
+      box-shadow: 0 12px 28px rgba(11,123,214,0.08);
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+    .card-elevated:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 38px rgba(11,123,214,0.14);
+    }
+
+    .card h3 {
+      margin: 0 0 6px;
+      font-size: 18px;
+    }
+    .card p {
+      margin: 4px 0;
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .card .muted {
+      color: var(--muted);
+      font-size: 13px;
+    }
+	/* Dropdown Container */
+.dropdown {
+  position: relative;
+}
+
+/* Dropdown Trigger Button */
+.drop-btn {
+   background: linear-gradient(136deg, #56e3f5, #134f69b3);
+   border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  color:var(--dark); 
+  font-size:16px;
+}
+ .drop-btn:hover{ background: rgba(11,123,214,0.06); color:var(--blue); }
+/* Dropdown Menu */
+.dropdown-menu {
+  position: absolute;
+  top: 44px;
+  right: 0;
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 14px;
+  min-width: 160px;
+  padding: 10px 0;
+  display: none;
+  flex-direction: column;
+  animation: fadeSlide 0.25s ease;
+  z-index: 999;
+}
+
+.dropdown-menu li a {
+  padding: 10px 18px;
+  display: block;
+  color: #626262;
+  text-decoration: none;
+  font-size: 15px;
+}
+
+.dropdown-menu li a:hover {
+  background: rgba(255,255,255,0.22);
+  border-radius: 10px;
+}
+
+/* Animation */
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+	
+	
+    /* ---------- HERO ---------- */
+    .hero{
+      min-height: 100vh;
+      display:grid;
+      place-items:center;
+      position:relative;
+      overflow:hidden;
+      padding:0;
+    }
+    .hero-bg{
+      position:absolute; inset:0;
+      background-image: url('https://images.unsplash.com/photo-1525441798143-35b0b00e8a30?q=80&w=1800&auto=format&fit=crop&ixlib=rb-4.0.3&s=0c1e4aa6f3d0e1a35a9dcf2989d2a93b');
+      background-size:cover; background-position:center;
+      filter: saturate(1.05) contrast(1.03);
+      transform: scale(1.02);
+    }
+    .hero-overlay{
+      position:absolute; inset:0;
+      background: linear-gradient(180deg, rgb(99 179 235 / 46%), rgb(83 185 171 / 13%));
+      mix-blend-mode: multiply;
+    }
+    .hero-card{
+      position:relative;
+      z-index:2;
+      width: min(980px, 94%);
+      margin: 28px auto;
+      background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(255,255,255,0.86));
+      border-radius: 18px;
+      padding: 48px;
+      box-shadow: var(--shadow-md);
+      display:flex;
+      gap:30px;
+      align-items:center;
+      transform: translateY(-10px);
+    }
+    .hero-left{ flex:1 1 56%; }
+    .hero-title{
+      margin:0 0 10px; font-size:40px; line-height:1.03; color:var(--dark);
+      background: linear-gradient(90deg,var(--blue),var(--teal));
+      -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+      font-weight:800;
+    }
+    .hero-sub{ color:var(--muted); font-size:16px; margin-bottom:18px; }
+    .hero-ctas{ display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
+    .btn{
+      padding:12px 18px; border-radius:12px; border:0; cursor:pointer; font-weight:700;
+    }
+    .btn-primary{
+      background: linear-gradient(90deg,var(--blue),var(--teal));
+      color:white; box-shadow: 0 12px 30px rgba(11,123,214,0.12);
+    }
+    .btn-ghost{
+      background:transparent; border:1px solid rgba(15,23,42,0.06); color:var(--dark);
+    }
+
+    .hero-right{ flex:1 1 44%; display:flex; justify-content:center; }
+    .hero-media{
+      width:95%; max-width:380px; border-radius:12px; overflow:hidden;
+      box-shadow: 0 14px 40px rgba(15,23,42,0.12);
+    }
+    .hero-media img{ width:100%; height:auto; display:block; }
+
+    /* stats row */
+    .stats{ display:flex; gap:10px; margin-top:18px; flex-wrap:wrap; }
+    .stat{
+      background:var(--card); padding:10px 14px; border-radius:12px;
+      box-shadow: var(--shadow-sm); min-width:110px; text-align:left;
+    }
+    .stat .num{ font-weight:800; color:var(--teal); font-size:18px; }
+    .stat .lbl{ font-size:12px; color:var(--muted); margin-top:4px; }
+
+    /* ---------- Sections ---------- */
+    section.section{
+      padding: 84px 24px;
+    }
+    .section h2{ font-size:34px; margin:0; color:var(--dark); }
+    .section p.lead{ margin-top:12px; color:var(--muted); font-size:16px; }
+
+    /* ---------- Impact cards ---------- */
+    .impact-grid{
+      display:flex; gap:22px; margin-top:28px; flex-wrap:wrap; justify-content:center;
+    }
+    .impact-card{
+      text-align:center;
+      padding:24px;
+    }
+    .impact-card .big{
+      font-size:28px; font-weight:800; color:var(--blue);
+    }
+    .impact-card .small{
+      margin-top:8px;
+    }
+
+    /* ---------- Why cards ---------- */
+    .why-grid{
+      display:flex; gap:22px; margin-top:28px; flex-wrap:wrap; justify-content:center;
+    }
+    .why-card{
+      width:320px;
+      padding:20px;
+    }
+    .why-card img{
+      width:100%; height:160px; object-fit:cover;
+      border-radius:10px; margin-bottom:12px;
+    }
+
+    /* ---------- Features ---------- */
+    .features-row{
+      display:flex; gap:28px; margin-top:26px; flex-wrap:wrap; align-items:center;
+    }
+    .feature-list{
+      flex:1 1 520px; display:grid; gap:12px;
+    }
+    .feature-item{
+      display:flex; gap:12px; align-items:center;
+      padding:16px 18px;
+    }
+    .feature-item .icon{
+      width:44px; height:44px; border-radius:10px;
+      display:grid; place-items:center; color:white; font-weight:700;
+      flex-shrink:0;
+    }
+    .feature-media{
+      flex: 0 0 320px; border-radius:12px; overflow:hidden;
+      box-shadow:var(--shadow-md);
+    }
+    .feature-media img{ width:100%; height:100%; object-fit:cover; }
+
+    /* ---------- Steps ---------- */
+    .steps{
+      width: min(var(--container), 96%);
+      margin: 40px auto 0;
+      display:flex;
+      flex-wrap:wrap;
+      gap:18px;
+      justify-content:center;
+    }
+    .steps .step{
+      width:260px;
+      padding:20px 18px;
+      font-size:14px;
+    }
+
+ /* EVENTS MODERN GRID */
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 28px;
+  margin-top: 30px;
+}
+
+/* EVENT CARD */
+.event-card {
+  border-radius: 20px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.25);
+  transition: 0.3s;
+  display: flex;
+  flex-direction: column;
+  background: rgba(255,255,255,0.13);
+}
+
+.event-card img {
+  width: 100%;
+  height: 210px;
+  object-fit: cover;
+}
+
+.event-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.22);
+}
+
+.event-content {
+  padding: 20px;
+  color: black;
+}
+
+.event-badge {
+  display: inline-block;
+  background: rgba(0,190,168,0.3);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  color: #dffdf7;
+  margin-bottom: 10px;
+}
+
+.event-btn {
+  margin-top: 12px;
+  padding: 10px 18px;
+  background: linear-gradient(135deg, #00cbe8, #00b49c);
+  border: none;
+  color: white;
+  border-radius: 8px;
+  width: fit-content;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.event-btn:hover {
+  background: linear-gradient(135deg, #00b4d1, #009c86);
+  transform: scale(1.04);
+}
+ 
+
+/* Voices of Change Grid */
+.voices-grid {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 28px;
+}
+
+/* Voice Card */
+.voice-card {
+  padding: 24px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.13);
+  border: 1px solid rgba(255,255,255,0.25);
+  backdrop-filter: blur(12px);
+  color: black;
+  transition: 0.35s ease;
+  text-align: center;
+}
+
+.voice-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 26px rgba(0,0,0,0.25);
+}
+
+/* Avatar */
+.voice-img {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 12px;
+  border: 3px solid rgba(0,255,230,0.5);
+  box-shadow: 0 0 14px rgba(0,255,255,0.35);
+}
+
+/* Name + Role */
+.role {
+  font-size: 14px;
+  opacity: 0.85;
+  color: #61dccb;
+}
+
+.voice-text {
+  margin-top: 14px;
+  line-height: 1.6;
+  color: black;
+}
+
+
+    /* ---------- contact ---------- */
+    .contact-card{
+      display:flex; gap:18px; align-items:center;
+      justify-content:space-between; flex-wrap:wrap;
+      padding:28px;
+      background:linear-gradient(90deg, rgba(8,179,155,0.08), rgba(11,123,214,0.06));
+      border-radius:14px; box-shadow:var(--shadow-sm);
+    }
+    .contact-cta{ display:flex; gap:12px; align-items:center; }
+
+    /* ---------- footer ---------- */
+    footer.footer{
+      margin-top:40px; padding:36px 24px;
+      background: linear-gradient(90deg,var(--blue),var(--teal));
+      color:white; border-radius:12px;
+    }
+
+    /* ---------- small screens ---------- */
+    @media (max-width: 920px){
+      .hero-card{
+        padding:22px; flex-direction:column; gap:18px; transform:none;
+      }
+      .hero-title{ font-size:30px; text-align:center; }
+      header{ top:8px; }
+      .nav-links{ display:none; }
+      .hamburger{ display:inline-block; }
+      nav.navbar{ justify-content:space-between; }
+      .hero-media{ max-width:300px; }
+      .feature-media{ order:-1; width:100%; }
+      .feature-list{ width:100%; }
+    }
+
+    @media (max-width: 720px){
+      .impact-grid,
+      .why-grid,
+      .events-grid,
+      .testimonials,
+      .steps{
+        justify-content:center;
+      }
+      .card,
+      .card-elevated{
+        width:100%;
+        max-width:350px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrap">
+  <!-- NAV -->
+  <header>
+    <nav class="navbar" role="navigation" aria-label="Main Navigation">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">FS</div>
+        <div>
+          <h1 style="font-size:16px;margin:0">FoodShare</h1>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px">Share food · Spread hope</div>
+        </div>
+      </div>
+
+      <div class="nav-links" role="menubar" aria-label="Primary">
+        <a href="#home">Home</a>
+        <a href="#impact">Impact</a>
+        <a href="#why">Why</a>
+        <a href="#how">How</a>
+        <a href="#events">Events</a>
+
+        <!-- ▼▼ UPDATED DROPDOWN BEGINS ▼▼ -->
+        <div class="dropdown">
+          <a></a><button class="drop-btn" onclick="toggleDropdown()">Get Involved ▾</button>
+
+          <ul id="dropMenu" class="dropdown-menu">
+            <li><a href="donor.jsp">Donor</a></li>
+            <li><a href="volunteer.jsp">Volunteer</a></li>
+            <li><a href="ngo.jsp">NGO</a></li>
+          </ul>
+        </div>
+        <!-- ▲▲ UPDATED DROPDOWN ENDS ▲▲ -->
+      </div>
+
+      <button class="hamburger" aria-label="Open menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M4 7h16M4 12h16M4 17h16"
+            stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </nav>
+  </header>
+</div>
+
+
+<!-- HERO -->
+<section id="home" class="hero">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="hero-overlay" aria-hidden="true"></div>
+
+  <div class="hero-card container">
+    <div class="hero-left">
+      <h2 class="hero-title">Turn surplus into sustenance — fast, safe, local.</h2>
+      <p class="hero-sub">FoodShare connects restaurants and volunteers to deliver surplus meals to communities that need them. Track every pickup, verify safety, and see real impact.</p>
+
+      <div class="hero-ctas">
+        <button class="btn btn-primary" onclick="scrollToId('#contact')">Donate Food</button>
+        <button class="btn btn-ghost" onclick="scrollToId('#how')">How it works</button>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="num num-animate" data-target="12500">0</div>
+          <div class="lbl">Meals Saved</div>
+        </div>
+        <div class="stat">
+          <div class="num num-animate" data-target="520">0</div>
+          <div class="lbl">Restaurants</div>
+        </div>
+        <div class="stat">
+          <div class="num num-animate" data-target="1340">0</div>
+          <div class="lbl">Volunteers</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <figure class="hero-media" aria-hidden="true">
+        <img src="https://medialibraryfbr.s3.us-east-2.amazonaws.com/wp-content/uploads/2022/12/04191305/volunteer-food-bank.jpg" alt="Volunteers delivering food" loading="lazy">
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACT -->
+<section id="impact" class="section">
+  <div class="container">
+    <h2>Our Impact</h2>
+    <p class="lead">We measure success by real-world outcomes — meals delivered, communities supported.</p>
+
+    <div class="impact-grid">
+      <div class="impact-card card-elevated">
+        <div class="big num-animate" data-target="12500">0</div>
+        <div class="small">Meals Saved</div>
+      </div>
+
+      <div class="impact-card card-elevated">
+        <div class="big num-animate" data-target="520">0</div>
+        <div class="small">Partner Restaurants</div>
+      </div>
+
+      <div class="impact-card card-elevated">
+        <div class="big num-animate" data-target="1340">0</div>
+        <div class="small">Active Volunteers</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHY -->
+<section id="why" class="section">
+  <div class="container">
+    <h2>Why FoodShare</h2>
+    <p class="lead">We solve hunger and reduce waste through smart coordination.</p>
+
+    <div class="why-grid">
+      <div class="why-card card-elevated">
+        <img src="https://fitmencook.com/wp-content/uploads/2023/03/mix-and-match-meal-prep11.jpg" alt="Fresh meals">
+        <h3>Fresh Meals Delivered</h3>
+        <p class="muted">Ensure timely pickup and delivery to maintain freshness and quality.</p>
+      </div>
+
+      <div class="why-card card-elevated">
+        <img src="https://www.aces.edu/wp-content/uploads/2024/11/AdobeStock_389315989-scaled.jpeg" alt="Community help">
+        <h3>Community Driven</h3>
+        <p class="muted">Volunteer-powered operations ensure meals reach the most in need.</p>
+      </div>
+
+      <div class="why-card card-elevated">
+        <img src="https://www.nrcm.org/wp-content/uploads/2020/03/storedfoodinfridge.jpg" alt="Zero waste">
+        <h3>Reduce Food Waste</h3>
+        <p class="muted">Partner with restaurants to cut surplus waste and promote sustainability.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section" id="how">
+  <div class="container">
+    <h2>How We Work</h2>
+    <p class="lead">A simple, transparent, and safe food-sharing process.</p>
+
+    <div class="steps">
+      <div class="step card-elevated">
+        <h3>1. Donor uploads surplus</h3>
+        <p class="muted">Restaurants list leftover meals with quantity and pickup time.</p>
+      </div>
+
+      <div class="step card-elevated">
+        <h3>2. Volunteers get notified</h3>
+        <p class="muted">Nearby volunteers receive alerts instantly.</p>
+      </div>
+
+      <div class="step card-elevated">
+        <h3>3. Food pickup & verification</h3>
+        <p class="muted">Hygiene checklist ensures safe and fresh transfer.</p>
+      </div>
+
+      <div class="step card-elevated">
+        <h3>4. Delivery to shelters</h3>
+        <p class="muted">Meals reach NGOs, shelters, and communities in need.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section id="events" class="section">
+  <div class="container">
+    <h2 class="section-title">Latest Events</h2>
+    <p class="lead">Be a part of our community activities and impact drives.</p>
+
+    <div class="events-grid">
+      
+      <!-- Event Card 1 -->
+      <div class="event-card glass-card">
+        <img src="https://foodbanklarimer.org/wp-content/uploads/2024/02/AdobeStock_662388699-1130x636-1-1024x576.jpeg" alt="Food Drive">
+        <div class="event-content">
+          <span class="event-badge">Community Drive</span>
+          <h3>Big Food Donation Day</h3>
+          <p class="muted">10 Oct 2025 • Downtown Hall</p>
+          <p>Join 200+ volunteers to help distribute fresh meals.</p>
+          <button class="event-btn">Join Event</button>
+        </div>
+      </div>
+
+      <!-- Event Card 2 -->
+      <div class="event-card glass-card">
+        <img src="https://www.utam.utoronto.ca/wp-content/uploads/2023/05/UTAM-II-Avery_Lam_Hong-1024x536.jpg" alt="Orientation">
+        <div class="event-content">
+          <span class="event-badge">Online</span>
+          <h3>Volunteer Orientation</h3>
+          <p class="muted">01 Nov 2025 • Zoom</p>
+          <p>Learn the full process of pickup and delivery.</p>
+          <button class="event-btn">Register</button>
+        </div>
+      </div>
+
+      <!-- Event Card 3 -->
+      <div class="event-card glass-card">
+        <img src="https://img.freepik.com/free-photo/top-view-food-donation-box_23-2148733850.jpg?semt=ais_hybrid&w=740&q=80" alt="Shelter">
+        <div class="event-content">
+          <span class="event-badge">Awareness</span>
+          <h3>Zero Food Waste Campaign</h3>
+          <p class="muted">15 Dec 2025 • Public Park</p>
+          <p>Spreading awareness to reduce waste in urban areas.</p>
+          <button class="event-btn">Know More</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<!-- VOICES OF CHANGE -->
+<section id="testimonials" class="section">
+  <div class="container">
+    <h2 class="section-title">Voices of Change</h2>
+    <p class="lead">What donors, volunteers, and communities say about FoodShare.</p>
+
+    <div class="voices-grid">
+
+      <!-- Card 1 -->
+      <div class="voice-card glass-card">
+        <div class="voice-top">
+          <img src="https://i.pravatar.cc/150?img=12" class="voice-img">
+          <h3>Rohit Verma</h3>
+          <span class="role">Volunteer</span>
+        </div>
+        <p class="voice-text">
+          “FoodShare made volunteering simple and meaningful.  
+          The entire pickup-to-delivery flow is smooth.”
+        </p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="voice-card glass-card">
+        <div class="voice-top">
+          <img src="https://i.pravatar.cc/150?img=35" class="voice-img">
+          <h3>Priya Deshmukh</h3>
+          <span class="role">Restaurant Owner</span>
+        </div>
+        <p class="voice-text">
+          “We used to waste so much food. Now everything goes to people who need it.  
+          FoodShare is a blessing.”
+        </p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="voice-card glass-card">
+        <div class="voice-top">
+          <img src="https://i.pravatar.cc/150?img=5" class="voice-img">
+          <h3>Maria Pinto</h3>
+          <span class="role">NGO Partner</span>
+        </div>
+        <p class="voice-text">
+          “The transparency and tracking system of FoodShare  
+          helps our shelter plan meals better.”
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- CONTACT -->
+<section id="contact" class="section">
+  <div class="container contact-card">
+    <div>
+      <h2>Get Involved</h2>
+      <p class="muted">Join us as a donor or volunteer and make an impact today.</p>
+    </div>
+
+    <div class="contact-cta">
+      <button class="btn btn-primary" onclick="alert('Thank you for joining FoodShare!')">Join Now</button>
+      <button class="btn btn-ghost" onclick="scrollToId('#home')">Back to Top</button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <p>© 2025 FoodShare — Share Food. Spread Hope.</p>
+  </div>
+</footer>
+
+<!-- JS -->
+<script>
+  function scrollToId(id){
+    document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Number animation
+  const counters = document.querySelectorAll('.num-animate');
+  const speed = 60;
+
+  counters.forEach(counter => {
+    const animate = () => {
+      const target = +counter.getAttribute('data-target');
+      const val = +counter.innerText;
+      const step = Math.ceil(target / speed);
+
+      if(val < target){
+        counter.innerText = val + step;
+        setTimeout(animate, 25);
+      } else {
+        counter.innerText = target;
+      }
+    };
+    animate();
+  });
+
+  // Mobile menu toggle
+  const hamburger = document.querySelector(".hamburger");
+  const navLinks = document.querySelector(".nav-links");
+
+  hamburger.addEventListener("click", () => {
+    navLinks.style.display = navLinks.style.display === "flex" ? "none" : "flex";
+  });
+</script>
+<script>
+function toggleDropdown() {
+  const menu = document.getElementById("dropMenu");
+  menu.style.display = menu.style.display === "flex" ? "none" : "flex";
+}
+
+// Click outside closes dropdown
+document.addEventListener("click", function(e) {
+  const menu = document.getElementById("dropMenu");
+  const btn = document.querySelector(".drop-btn");
+
+  if (!btn.contains(e.target) && !menu.contains(e.target)) {
+    menu.style.display = "none";
+  }
+});
+</script>
+
+</body>
+</html>
